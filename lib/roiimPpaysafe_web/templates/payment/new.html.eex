@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <script src="https://hosted.paysafe.com/checkout/v2/paysafe.checkout.min.js"></script>
+  </head>
+
+ 
+  <body>
+    <%= form_for @conn, Routes.payment_path(@conn, :new), [as: :payment], fn f -> %>
+      <div class="form-group">
+        <%= label f, :name, class: "control-label" %>
+        <%= text_input f, :name, class: "form-control" %>
+        <%= error_tag f, :name %>
+      </div>
+
+      <div class="form-group">
+        <%= label f, :street, class: "control-label" %>
+        <%= text_input f, :street, class: "form-control", rows: 5 %>
+        <%= error_tag f, :street %>
+      </div>
+
+      <div class="form-group">
+        <%= label f, :city, class: "control-label" %>
+        <%= text_input f, :city, class: "form-control", rows: 5 %>
+        <%= error_tag f, :city %>
+      </div>
+
+      <div class="form-group">
+        <%= label f, :zip, class: "control-label" %>
+        <%= text_input f, :zip, class: "form-control", rows: 5 %>
+        <%= error_tag f, :zip %>
+      </div>
+
+      <div class="form-group">
+        <%= label f, :amount, class: "control-label" %>
+        <%= text_input f, :amount, class: "form-control" %>
+        <%= error_tag f, :amount %>
+      </div>
+
+      <div class="form-group">
+        <%= submit "Pay", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </body>
+</html>
