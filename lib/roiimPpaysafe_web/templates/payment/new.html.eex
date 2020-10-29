@@ -5,7 +5,7 @@
 
  
   <body>
-    <%= form_for @conn, Routes.payment_path(@conn, :new), [as: :payment], fn f -> %>
+    <%= form_for @conn, Routes.payment_path(@conn, :create), [as: :payment], fn f -> %>
       <div class="form-group">
         <%= label f, :name, class: "control-label" %>
         <%= text_input f, :name, class: "form-control" %>
@@ -40,5 +40,96 @@
         <%= submit "Pay", class: "btn btn-primary" %>
       </div>
     <% end %>
+
+
+    <body>
+        <button onclick="checkout()"> Pay $25 </button>
+    </body>
+
+    <script>
+        function checkout() {
+            paysafe.checkout.setup("cHVibGljLTc3NTE6Qi1xYTItMC01ZjAzMWNiZS0wLTMwMmQwMjE1MDA4OTBlZjI2MjI5NjU2M2FjY2QxY2I0YWFiNzkwMzIzZDJmZDU3MGQzMDIxNDUxMGJjZGFjZGFhNGYwM2Y1OTQ3N2VlZjEzZjJhZjVhZDEzZTMwNDQ=", {
+                "currency": "USD",
+                "amount": 10000,
+                "locale": "en_US",
+                "customer": {
+                    "firstName": "John",
+                    "lastName": "Dee",
+                    "email": "johndee@paysafe.com",
+                    "phone": "1234567890",
+                    "dateOfBirth": {
+                        "day": 1,
+                        "month": 7,
+                        "year": 1990
+                    }
+                },
+                "billingAddress": {
+                    "nickName": "John Dee",
+                    "street": "20735 Stevens Creek Blvd",
+                    "street2": "Montessori",
+                    "city": "Cupertino",
+                    "zip": "95014",
+                    "country": "US",
+                    "state": "CA"
+                },
+                "environment": "TEST",
+                "merchantRefNum": "1559900597607",
+                "canEditAmount": true,
+                "merchantDescriptor": {   
+                    "dynamicDescriptor": "XYZ",
+                    "phone": "1234567890"
+                    },
+                "displayPaymentMethods":["skrill","card"],
+                "paymentMethodDetails": {
+                    "paysafecard": {
+                        "consumerId": "1232323"
+                    },
+                    "paysafecash": {
+                        "consumerId": "123456"
+                    },
+                    "sightline": {
+                        "consumerId": "123456",
+                        "SSN": "123456789",
+                        "last4ssn": "6789",
+                        "accountId":"1009688222"
+                    },
+                    "vippreferred":{
+                        "consumerId": "550726575",
+                        "accountId":"1679688456"
+                    }
+                }
+            }, function(instance, error, result) {
+                if (result && result.paymentHandleToken) {
+                    console.log(result.paymentHandleToken);
+                    var request = require('request');
+                    var options = {
+                      'method': 'POST',
+                      'url': 'https://private-anon-8467725ed3-paysafeapipaymenthubv1.apiary-proxy.com/paymenthub/v1/payments',
+                      'headers': {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Basic cHJpdmF0ZS03NzUxOkItcWEyLTAtNWYwMzFjZGQtMC0zMDJkMDIxNDQ5NmJlODQ3MzJhMDFmNjkwMjY4ZDNiOGViNzJlNWI4Y2NmOTRlMjIwMjE1MDA4NTkxMzExN2YyZTFhODUzMTUwNWVlOGNjZmM4ZTk4ZGYzY2YxNzQ4'
+                      },
+                      body: JSON.stringify({"merchantRefNum":"aryan123","merchantCustomerId":"roiim1000","amount":10000,"currencyCode":"USD","paymentHandleToken":"enter a valid payment token","description":"ROIIIM Assignment"})
+
+                    };
+                    request(options, function (error, response) {
+                      if (error) throw new Error(error);
+                      console.log(response.body);
+                    });
+                } else {
+                    console.error(error);
+                    // Handle the error
+                }
+            }, function(stage, expired) {
+                switch(stage) {
+                    case "PAYMENT_HANDLE_NOT_CREATED": // Handle the scenario
+                    case "PAYMENT_HANDLE_CREATED": // Handle the scenario
+                    case "PAYMENT_HANDLE_REDIRECT": // Handle the scenario
+                    case "PAYMENT_HANDLE_PAYABLE": // Handle the scenario
+                    default: // Handle the scenario
+                }
+            });
+        }
+    </script>
   </body>
 </html>
