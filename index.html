@@ -137,7 +137,7 @@
           let body = JSON.stringify({ "merchantRefNum": refNum, "merchantCustomerId": "roiim1001", "amount": parseInt(document.getElementById('inputAmount').value)*100, "currencyCode": "USD", "paymentHandleToken": result.paymentHandleToken, "description": "ROIIIM Paysafe card pay" })
         
           $.ajax({
-            url: 'http://127.0.0.1:4000/payment',
+            url: 'https://roiimpaysafe.gigalixirapp.com/payment',
             type: 'post',
             data: body,
             contentType: 'application/json',
