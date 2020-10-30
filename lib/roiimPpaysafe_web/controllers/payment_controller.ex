@@ -5,23 +5,12 @@ defmodule RoiimPpaysafeWeb.PaymentController do
     render conn, "new.html"
   end
 
-  def create(conn, _params) do
-    # require IEx
-    # IEx.pry
-    case Payment.process_payment() do
+  def create(conn, params) do
+  case Payment.process_payment(params) do
       {:ok, res} ->
-        require IEx
-        IEx.pry
-        IO.puts(res)
-        conn
-        |> put_flash(:info, "#{res} Payment done!")
-      {:error, _coz} ->
-        render conn, "new.html"
+        render(conn, "success.json", transaction_id: res)
+      {:error, coz} ->
+        render(conn, "error.json", msg: coz)
     end
-
-  end
-
-  def index() do
-
   end
 end

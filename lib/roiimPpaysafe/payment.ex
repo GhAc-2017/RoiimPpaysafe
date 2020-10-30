@@ -1,4 +1,6 @@
 defmodule RoiimPpaysafe.Payment do
+  alias RoiimPpaysafe.Repo
+
   @paysafe_base_url "https://api.test.paysafe.com/"
 
   @paysafe_header [
@@ -18,19 +20,21 @@ defmodule RoiimPpaysafe.Payment do
     :crypto.strong_rand_bytes(length) |> Base.url_encode64 |> binary_part(0, length)
   end
 
-  def process_payment() do
+  def process_payment(params) do
     url = "#{@paysafe_base_url}paymenthub/v1/payments"
-    token = generate_payement_handle_token()
+    # token = generate_payement_handle_token()
 
-    details =
-      Jason.encode!(%{
-        merchantRefNum: merchant_ref_generator(),
-        merchantCustomerId: "roiim1000",
-        amount: 3000,
-        currencyCode: "USD",
-        paymentHandleToken: token,
-        description: "paying you"
-      })
+    # details =
+    #   Jason.encode!(%{
+    #     merchantRefNum: merchant_ref_generator(),
+    #     merchantCustomerId: "roiim1000",
+    #     amount: 3000,
+    #     currencyCode: "USD",
+    #     paymentHandleToken: token,
+    #     description: "paying you"
+    #   })
+
+    details = Jason.encode!(params)
 
     case HTTPoison.post(url, details, @paysafe_header) do
       {:ok, %HTTPoison.Response{body: response_body}} ->
@@ -105,4 +109,5 @@ defmodule RoiimPpaysafe.Payment do
         generate_payement_handle_token()
     end
   end
+
 end

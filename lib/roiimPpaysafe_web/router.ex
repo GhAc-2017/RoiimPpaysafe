@@ -14,7 +14,6 @@ defmodule RoiimPpaysafeWeb.Router do
   end
 
   scope "/", RoiimPpaysafeWeb do
-    pipe_through :browser
 
     get "/", PageController, :index
     resources("/payment", PaymentController)
